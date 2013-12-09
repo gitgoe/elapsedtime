@@ -8,7 +8,11 @@ import concurrent.ExecutionContext.Implicits.global
 import scala.util.Failure
 import scala.util.Success
 
-object ElapsedTime {
+/**
+ * @author goe
+ *
+ */
+object ElapsedTime { 
 
   val DEFAULT_ENCODING = "UTF-8"
   val tagsURLLucene = """url:(.*?)json?""".r
