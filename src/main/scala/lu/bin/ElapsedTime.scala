@@ -2,9 +2,6 @@ package lu.bin
 
 import scala.io.Source
 import java.io.File
-import concurrent.Future
-import concurrent.future
-import concurrent.ExecutionContext.Implicits.global
 import scala.util.Failure
 import scala.util.Success
 
