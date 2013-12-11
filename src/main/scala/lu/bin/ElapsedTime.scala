@@ -9,7 +9,41 @@ import scala.util.Success
  * @author goe
  *
  */
-object ElapsedTime { 
+trait Operation{
+  
+  def count(input: List[(String, String, String, Long)]) = {
+    input.groupBy(_._1).mapValues(_.size).map(x => (x._1, x._2))
+  }
+
+  def max(input: List[(String, String, String, Long)]) = {
+    input.groupBy(_._1).values.map(_.reduceLeft((x, y) => if (x._4 > y._4)
+      x else y)).map(z => (z._1, z._4))
+  }
+
+  def min(input: List[(String, String, String, Long)]) = {
+    input.groupBy(_._1).values.map(_.reduceLeft((x, y) => if (x._4 < y._4)
+      x else y)).map(z => (z._1, z._4))
+  }
+
+  def totalElapsedTime(input: List[(String, String, String, Long)]) = {
+    input.map(x => x._4).sum
+  }
+  
+}
+trait Formatter{
+  
+  def percent(value: Long, maxValue: Long) = {
+    ("%3.2f" format (value.toDouble / maxValue.toDouble) * 100) + "%"
+  }
+
+  def flatten[A, B, C, D, E, F](t: ((A, B), ((C, D), (E, F)))) = (t._1._1, t._1._2, t._2._1._2, t._2._2._2)
+
+  def format[A, B, C, D](maxValue: Long, t: (A, Int, C, D)) = ("URL=" + t._1 + " hits=" + t._2 + "  min=" + t._3 + "ms max=" + t._4 + "ms " + percent(t._2, maxValue))
+
+  
+}
+
+object ElapsedTime extends Operation with Formatter { 
 
   val DEFAULT_ENCODING = "UTF-8"
   val tagsURLLucene = """url:(.*?)json?""".r
@@ -51,32 +85,9 @@ object ElapsedTime {
     case _ => for ( tagsURLLucene(url) <- tagsURLLucene findFirstIn line; mixElapsedTime(elapsed) <- mixElapsedTime findFirstIn line ) yield (hashKey( url).getOrElse("NA"), "GET", url, string2Long(elapsed))
   }
 
-  def count(input: List[(String, String, String, Long)]) = {
-    input.groupBy(_._1).mapValues(_.size).map(x => (x._1, x._2))
-  }
+ 
 
-  def max(input: List[(String, String, String, Long)]) = {
-    input.groupBy(_._1).values.map(_.reduceLeft((x, y) => if (x._4 > y._4)
-      x else y)).map(z => (z._1, z._4))
-  }
-
-  def min(input: List[(String, String, String, Long)]) = {
-    input.groupBy(_._1).values.map(_.reduceLeft((x, y) => if (x._4 < y._4)
-      x else y)).map(z => (z._1, z._4))
-  }
-
-  def totalElapsedTime(input: List[(String, String, String, Long)]) = {
-    input.map(x => x._4).sum
-  }
-
-  def percent(value: Long, maxValue: Long) = {
-    ("%3.2f" format (value.toDouble / maxValue.toDouble) * 100) + "%"
-  }
-
-  def flatten[A, B, C, D, E, F](t: ((A, B), ((C, D), (E, F)))) = (t._1._1, t._1._2, t._2._1._2, t._2._2._2)
-
-  def format[A, B, C, D](maxValue: Long, t: (A, Int, C, D)) = ("URL=" + t._1 + " hits=" + t._2 + "  min=" + t._3 + "ms max=" + t._4 + "ms " + percent(t._2, maxValue))
-
+  
   def main(args: Array[String]): Unit = {
     println("call ElapsedTime...")
 
