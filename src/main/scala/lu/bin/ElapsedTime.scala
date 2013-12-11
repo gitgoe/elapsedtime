@@ -24,16 +24,14 @@ object ElapsedTime {
       val tokens = key.substring(0, key.indexOf("?")).split("""/""").toList.tail
       //println(tokens.length)
       tokens.length match {
-        case x: Int => if (x > 1) Some(tokens.head + "." + tokens
-          .tail.head)
+        case x: Int => if (x > 1) Some(tokens.head + "." + tokens.tail.head)
         else None
       }
     } else {
       val tokens = key.split("""/""").toList.tail
       //println(tokens.length)
       tokens.length match {
-        case x: Int => if (x > 1) Some(tokens.head + "." + tokens
-          .tail.head)
+        case x: Int => if (x > 1) Some(tokens.head + "." + tokens.tail.head)
         else None
       }
     }
