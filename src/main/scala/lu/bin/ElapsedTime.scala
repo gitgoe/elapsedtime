@@ -85,16 +85,20 @@ object ElapsedTime extends Operation with Formatter {
     case _ => for ( tagsURLLucene(url) <- tagsURLLucene findFirstIn line; mixElapsedTime(elapsed) <- mixElapsedTime findFirstIn line ) yield (hashKey( url).getOrElse("NA"), "GET", url, string2Long(elapsed))
   }
   
-  
-  def main(args: Array[String]): Unit = {
-    println("call ElapsedTime...")
-
-    val l1 = for (
-      file <- new File("""./logs/""").listFiles.filter(_.getName().contains(".log"));
+  def readFile(file:String) = {
+    for (
+      file <- new File(file).listFiles.filter(_.getName().contains(".log"));
       line <- Source.fromFile(file, DEFAULT_ENCODING).getLines.filter(_.contains("elapsed"));
       link <- { /*println(line);*/ parseLine(line) }
     ) yield link
-
+  } 
+  
+  
+  def main(args: Array[String]): Unit = {
+    println("call ElapsedTime...")
+    
+    val l1 = readFile("""./logs/""")
+    
     //l1.foreach(println)
 
     val mCount = count(l1.toList).toList
