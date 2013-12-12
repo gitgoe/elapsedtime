@@ -84,9 +84,7 @@ object ElapsedTime extends Operation with Formatter {
     case x if x.contains("POST") => for ( tagsURLPost(url) <- tagsURLPost findFirstIn line; tagsTime(elapsed) <- tagsTime findFirstIn line ) yield (hashKey(url).getOrElse("NA"), "POST", url, string2Long(elapsed))
     case _ => for ( tagsURLLucene(url) <- tagsURLLucene findFirstIn line; mixElapsedTime(elapsed) <- mixElapsedTime findFirstIn line ) yield (hashKey( url).getOrElse("NA"), "GET", url, string2Long(elapsed))
   }
-
- 
-
+  
   
   def main(args: Array[String]): Unit = {
     println("call ElapsedTime...")
